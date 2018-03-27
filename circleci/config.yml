@@ -22,7 +22,7 @@ version: 2
     userAPITests:
       docker:
       - image: circleci/openjdk:8-jdk
-      working_directory: ~/repo/users-api/
+      working_directory: ~/repo
       environment:
         JVM_OPTS: -Xmx3200m
         TERM: dumb
@@ -34,8 +34,9 @@ version: 2
       - v1-dependencies-
       - run: gradle dependencies
       - save_cache:
-          paths:
-           - ~/.gradle
+          paths: |
+          cd users-api
+            ./gradlew test
       key: v1-dependencies-{{ checksum "build.gradle" }}
       - run: gradle test
   workflows:
