@@ -18,7 +18,7 @@ version: 2
           paths:
            - ~/.gradle
       key: v1-dependencies-{{ checksum "build.gradle" }}
-      - run: gradle test
+      - run: ./gradlew test
     userAPITests:
       docker:
       - image: circleci/openjdk:8-jdk
@@ -34,16 +34,18 @@ version: 2
       - v1-dependencies-
       - run: gradle dependencies
       - save_cache:
-          paths: |
-          cd users-api
-            ./gradlew test
+          paths:
+           - ~/.gradle
       key: v1-dependencies-{{ checksum "build.gradle" }}
-      - run: gradle test
+      - run: |
+        cd users-api
+        ./gradlew test
   workflows:
     version: 2
-    one_and_two:
+    all-tests:
       jobs:
       - userAPITests
-      - featureTests
+      - featureTests:
+        -userAPITests
 
 
